@@ -1,5 +1,8 @@
 const toggleState = 1;
-
+localStorage.setItem("isNet", JSON.stringify(0));
+localStorage.setItem("isCheck", JSON.stringify(0));
+localStorage.setItem("is1Check", JSON.stringify(0));
+console.log(localStorage.getItem("isNet"), localStorage.getItem("isCheck"), localStorage.getItem("is1Check"));
 function themeValue(toggleState) {
     if (toggleState == 1) {
         document.documentElement.setAttribute('data-theme', 'light');
@@ -53,28 +56,30 @@ document.documentElement.setAttribute('data-theme', currentTheme);
 function searchBar() {
     // Declare variables
     const warning = document.getElementsByClassName("warning")[0];
-    var input, filter, ul, li, a, i, txtValue;
-    input = document.getElementById('search1');
+    var filter, a, i, txtValue;
+    const input = document.getElementById('search1');
+    const ul = document.getElementById("searchGames");
+    const li = ul.getElementsByTagName('li');
     filter = input.value.toUpperCase();
-    ul = document.getElementById("searchGames");
-    li = ul.getElementsByTagName('li');
   
     // Loop through all list items, and hide those who don't match the search query
-    for (i = 0; i < li.length; i++) {
-      a = li[i].getElementsByTagName("a")[0];
-      txtValue = a.textContent || a.innerText;
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        li[i].style.display = "";
-        ul.style.display = "block";
-        warning.innerHTML = '';
-      } else {
-        li[i].style.display = "none";
-        warning.innerText += "No search Results found";
+    const searchRegex = new RegExp(filter, 'i');
+
+    const liArray = Array.from(li);
+    liArray.forEach((item) => {
+      const a = item.getElementsByTagName("a")[0];
+      if (a) {
+        const txtValue = a.textContent || a.innerText;
+        if (searchRegex.test(txtValue)) {
+          item.style.display = "";
+          ul.style.display = "block";
+          warning.innerHTML = '';
+        } else {
+          item.style.display = "none";
+        }
       }
-     if (warning.innerHTML === "No search Results foundNo search Results found") {
-        warning.innerHTML = "No search Results found";
-      }
-    }
+    });
+    
     }
 
 
@@ -139,3 +144,63 @@ function getCustInput() {
     localStorage.setItem("useCust", JSON.stringify(useCust));
   }
  }
+
+ function buttonProvid() {
+  let isCheckdata = localStorage.getItem("isCheck");
+  let isCheck = JSON.parse(isCheckdata);
+ 
+  if (isCheck == 0) {
+      isCheck = 1;
+  } else {
+  isCheck = 0;
+  }
+  localStorage.setItem("isCheck", JSON.stringify(isCheck));
+}
+
+function netPlay() {
+  let isNetdata = localStorage.getItem("isNet");
+  let isNet = JSON.parse(isNetdata);
+ 
+  if (isNet == 0) {
+      isNet = 1;
+  } else {
+  isNet = 0;
+  }
+  localStorage.setItem("isNet", JSON.stringify(isNet));
+  console.log(isNet);
+}
+
+let doGitHack = 0;
+let gitHackDat = localStorage.getItem("doGitHack");
+doGitHack = JSON.parse(gitHackDat);
+
+function gitHack() {
+  console.log("real")
+  doGitHack = localStorage.getItem("doGitHack");
+  if (doGitHack == 1) {
+    doGitHack = 0;
+    console.log("swapped1");
+  } else {
+    doGitHack = 1;
+    console.log("Swapped");
+  }
+  localStorage.setItem("doGitHack", JSON.stringify(doGitHack));
+}
+
+function buttonLoad2() {
+  let isNetdata = localStorage.getItem("isNet");
+  isNet = JSON.parse(isNetdata);
+  if (isNet == 1) {
+  document.getElementById("swapNet").checked = true;
+  }
+}
+buttonLoad2();
+
+function buttonLoad3() {
+  let isDoGitHackData = localStorage.getItem("doGitHack");
+  doGitHack = JSON.parse(isDoGitHackData);
+  if (doGitHack == 1) {
+  document.getElementById("swapHack").checked = true;
+  }
+}
+buttonLoad3();
